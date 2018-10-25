@@ -183,12 +183,14 @@ class training_base(object):
     def modelSet(self):
         return not self.keras_model==None
         
-    def setModel(self,model, datasets = None, removedVars = None, **modelargs):
+    def setModel(self,model, datasets = None, removedVars = None, nRegTargets = None, **modelargs):
         if len(self.keras_inputs)<1:
-            raise Exception('setup data first') 
+            raise Exception('setup data first')
+        if nRegTargets is None:
+            nRegTargets = self.train_data.getNRegressionTargets()
         self.keras_model=model(self.keras_inputs,
                                self.train_data.getNClassificationTargets(),
-                               self.train_data.getNRegressionTargets(),
+                               nRegTargets,
 			       datasets,
 			       removedVars,
                                **modelargs)
