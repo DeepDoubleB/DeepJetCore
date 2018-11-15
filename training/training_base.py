@@ -265,6 +265,7 @@ class training_base(object):
                    lr_minimum=0.000001,
                    maxqsize=20, 
                    checkperiod=10,
+                   lambda_callback=None,
                    **trainargs):
         
         
@@ -322,7 +323,9 @@ class training_base(object):
                                     lr_minimum=lr_minimum,
                                     outputDir=self.outputDir,
                                     minTokenLifetime=minTokenLifetime,                                
-                                    checkperiod=checkperiod)
+                                    checkperiod=checkperiod,
+                                    lambda_callback=lambda_callback,
+                                    max_epochs=nepochs)
         nepochs=nepochs-self.trainedepoches
         print('starting training')
         import keras

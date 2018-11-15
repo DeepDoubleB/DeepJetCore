@@ -73,7 +73,18 @@ class Losstimer(Callback):
         cop['elapsed'] = elapsed
         self.points.append(cop)
         
+
+class LambdaCallback(Callback):
+    def __init__(self, alpha, max_epochs):
+        self.alpha = alpha
+        self.max_epochs = max_epochs
         
+    def on_epoch_end(self, epoch, logs={}):
+        import numpy as np
+        print("\nlambda_callback = %f\n"%(2./(1.+np.exp(-10.*epoch/self.max_epochs))-1.))
+        K.set_value(self.alpha, 2./(1.+np.exp(-10.*epoch/self.max_epochs))-1.)
+            
+                                                                                  
 class checkTokens_callback(Callback):
     
     def __init__(self,cutofftime_hours=48):
@@ -109,6 +120,8 @@ class DeepJet_callbacks(object):
                  outputDir='',
                  minTokenLifetime=5,
                  checkperiod=10,
+                 lambda_callback=None,
+                 max_epochs=50,
                  plotLossEachEpoch=True):
         
 
@@ -129,6 +142,9 @@ class DeepJet_callbacks(object):
                                      cooldown=lr_cooldown, min_lr=lr_minimum)
             self.callbacks.append(self.reduce_lr)
 
+        if lambda_callback is not None:
+            self.lambda_callback = LambdaCallback(lambda_callback, max_epochs)
+            self.callbacks.append(self.lambda_callback)
 
         self.modelbestcheck=ModelCheckpoint(outputDir+"/KERAS_check_best_model.h5", 
                                         monitor='val_loss', verbose=1, 
