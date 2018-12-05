@@ -7,6 +7,10 @@ from DeepJetCore.DataCollection import DataCollection
 parser = ArgumentParser('convert a data collection to a single set of numpy arrays. Warning, this can produce a large output')
 parser.add_argument('inputDataCollection')
 parser.add_argument('outputFilePrefix')
+parser.add_argument('--isplit', default=0, type=int,
+                    help='do ith split')
+parser.add_argument('--maxsplit', default=1, type=int,
+                    help='split into maxsplit data sets')
 args = parser.parse_args()
 
 print('reading data collection')
@@ -15,13 +19,13 @@ dc=DataCollection()
 dc.readFromFile(args.inputDataCollection)
 
 print('producing feature array')
-feat=dc.getAllFeatures()
+feat=dc.getAllFeatures(isplit = args.isplit, maxsplit = args.maxsplit)
 
 print('producing truth array')
-truth=dc.getAllLabels()
+truth=dc.getAllLabels(isplit = args.isplit, maxsplit = args.maxsplit)
 
 print('producing weight array')
-weight=dc.getAllWeights()
+weight=dc.getAllWeights(isplit = args.isplit, maxsplit = args.maxsplit)
 
 print('producing means and norms array')
 means=dc.means

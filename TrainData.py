@@ -36,7 +36,7 @@ def fileTimeOut(fileName, timeOut):
     print('file I/O problems... waiting for filesystem to become available for '+fileName)
     while not os.path.isdir(filepath):
         if counter > timeOut:
-            print('...file could not be opened within '+str(timeOut)+ ' seconds')
+            print('...file '+fileName+' could not be opened within '+str(timeOut)+ ' seconds')
         counter+=1
         time.sleep(1)
 
@@ -228,6 +228,7 @@ class TrainData(object):
     def writeOut(self,fileprefix):
         
         import h5py
+        print("accessing %s in %s"%(fileprefix, "TrainData.py"))
         fileTimeOut(fileprefix,120)
         h5f = h5py.File(fileprefix, 'w')
         
@@ -309,7 +310,7 @@ class TrainData(object):
         import multiprocessing
         
         #print('\ninit async read\n')
-        
+        print("accessing %s in %s"%(fileprefix, "TrainData.py"))
         fileTimeOut(fileprefix,120)
         #print('\nfile access ok\n')
         self.samplename=fileprefix
@@ -648,6 +649,7 @@ class TrainData(object):
         from root_numpy import tree2array, root2array
         if isinstance(filenames, list):
             for f in filenames:
+                print("accessing %s in %s"%(f, "TrainData.py"))
                 fileTimeOut(f,120)
             print('add files')
             nparray = root2array(
@@ -659,7 +661,8 @@ class TrainData(object):
 	    print('done add files')
             return nparray
         else:    
-            fileTimeOut(filenames,120) #give eos a minute to recover
+            print("accessing %s in %s"%(filenames, "TrainData.py"))
+            fileTimeOut(filenames,120) #give eos 2 minutes to recover
             rfile = ROOT.TFile.Open(filenames)
             tree = rfile.Get(self.treename)
             if not self.nsamples:
