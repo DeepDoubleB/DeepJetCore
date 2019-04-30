@@ -660,17 +660,17 @@ class DataCollection(object):
                     )
         self.writeToFile(outputDir+'/'+output_name)
         
-    def getAllLabels(self):
-        return self.__stackData(self.dataclass,'y')
+    def getAllLabels(self, isplit = 0, maxsplit = 1):
+        return self.__stackData(self.dataclass,'y',isplit,maxsplit)
     
-    def getAllFeatures(self):
-        return self.__stackData(self.dataclass,'x')
+    def getAllFeatures(self, isplit = 0, maxsplit = 1):
+        return self.__stackData(self.dataclass,'x',isplit,maxsplit)
     
-    def getAllSpectators(self):
-        return self.__stackData(self.dataclass,'z')
+    def getAllSpectators(self, isplit = 0, maxsplit = 1):
+        return self.__stackData(self.dataclass,'z',isplit,maxsplit)
         
-    def getAllWeights(self):
-        return self.__stackData(self.dataclass,'w')
+    def getAllWeights(self, isplit = 0, maxsplit = 1):
+        return self.__stackData(self.dataclass,'w',isplit,maxsplit)
     
     
     def getSamplePath(self,samplefile):
@@ -679,12 +679,17 @@ class DataCollection(object):
             return samplefile
         return self.dataDir+'/'+samplefile
     
-    def __stackData(self, dataclass, selector):
+    def __stackData(self, dataclass, selector, isplit = 0, maxsplit = 1):
         import numpy
         td=dataclass
         out=[]
         firstcall=True
-        for sample in self.samples:
+        assert maxsplit <= len(self.samples)
+        nsamples = len(self.samples)/maxsplit
+        firstsample = isplit*nsamples
+        lastsample = (isplit+1)*nsamples
+        if isplit == maxsplit-1: lastsample = len(self.samples)
+        for sample in self.samples[firstsample:lastsample]:
             td.readIn(self.getSamplePath(sample))
             #make this generic
             thislist=[]
