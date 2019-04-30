@@ -28,7 +28,7 @@ print('producing weight array')
 weight=dc.getAllWeights(isplit = args.isplit, maxsplit = args.maxsplit)
 
 print('producing spectator array')
-spectator=dc.getAllSpectators()
+spectator=dc.getAllSpectators(isplit = args.isplit, maxsplit = args.maxsplit)
 
 print('producing means and norms array')
 means=dc.means
@@ -46,6 +46,6 @@ for i in range(len(weight)):
     save(args.outputFilePrefix+'_weights_'+str(i) +'.npy', weight[i])
 
 for i in range(len(spectator)):
-    save(args.outputFilePrefix+'_spectators_'+str(i) +'.npy', weight[i])
+    save(args.outputFilePrefix+'_spectators_'+str(i) +'.npy', spectator[i])
     
 save(args.outputFilePrefix+'_meansandnorms.npy', means)
