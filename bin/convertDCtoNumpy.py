@@ -23,6 +23,9 @@ truth=dc.getAllLabels()
 print('producing weight array')
 weight=dc.getAllWeights()
 
+print('producing spectator array')
+spectator=dc.getAllSpectators()
+
 print('producing means and norms array')
 means=dc.means
 
@@ -37,5 +40,8 @@ for i in range(len(truth)):
     
 for i in range(len(weight)):
     save(args.outputFilePrefix+'_weights_'+str(i) +'.npy', weight[i])
+
+for i in range(len(spectator)):
+    save(args.outputFilePrefix+'_spectators_'+str(i) +'.npy', weight[i])
     
 save(args.outputFilePrefix+'_meansandnorms.npy', means)
